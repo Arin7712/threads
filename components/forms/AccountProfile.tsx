@@ -189,7 +189,7 @@ const AccountProfile = ({user, btnTitle} : Props) => {
                 <FormControl>
                   <Textarea
                   rows={10}
-                  className="account-form_input no-focus"
+                  className="account-form_input no-focus resize-none"
                   {...field}/>
                 </FormControl>
                 <FormMessage/>
