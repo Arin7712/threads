@@ -36,7 +36,7 @@ export default async function Home({params}: {params: {id:string}}){
   return(
 <>
             <h1 className="head-text">Update Thread</h1>
-            <UpdateThreadForm userId={userIdBase64} threadId={params.id} threadText={text} threadImage={image}/>
+            <UpdateThreadForm userId={userInfo._id} threadId={params.id} threadText={text} threadImage={image}/>
             {/* <PostThread userId={userInfo._id}></PostThread> */}
         </>
   )
