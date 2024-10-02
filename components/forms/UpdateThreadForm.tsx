@@ -17,19 +17,22 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
 import { ThreadValidation } from "@/lib/validations/thread";
-import { createThread } from "@/lib/actions/thread.actions";
+import { createThread, fetchThreadById, updateThread } from "@/lib/actions/thread.actions";
 import { useOrganization } from "@clerk/nextjs";
 import { useUploadThing } from "@/lib/uploadthing";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { isBase64Image } from "@/lib/utils";
 import Image from "next/image";
 import { Input } from "../ui/input";
 
 interface Props {
   userId: string;
+  threadId: string;
+  threadText: string;
+  threadImage: string;
 }
 
-function PostThread({ userId }: Props) {
+ function UpdateThreadForm({ userId, threadId, threadImage, threadText }: Props) {
   const [files, setFiles] = useState<File[]>([]);
   const { startUpload } = useUploadThing('media')
   const router = useRouter();
@@ -40,9 +43,9 @@ function PostThread({ userId }: Props) {
   const form = useForm({
     resolver: zodResolver(ThreadValidation),
     defaultValues: {
-      thread: "",
+      thread: threadText,
       accountId: userId,
-      image:''
+      image: threadImage || '',
     },
   });
 
@@ -69,7 +72,9 @@ function PostThread({ userId }: Props) {
 
   const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
     const blob = values.image;
+
     if(blob){
+
       const hasImageChanged = isBase64Image(blob);
       if(hasImageChanged){
         const imgRes = await startUpload(files);
@@ -79,15 +84,18 @@ function PostThread({ userId }: Props) {
       }
     }
 
-
     if (!organization) {
-        await createThread({
-            text: values.thread,
-            author: userId,
-            communityId: null,
-            path: pathname,
-            image: values.image || '', // Use the uploaded image URL
-        });
+        await updateThread(
+            {
+              text: values.thread,
+              author: userId,
+              communityId: null,
+              path: pathname,
+              image: values.image || '',
+            },
+            threadId
+          );
+          console.log('Changes done')
     } else {
         await createThread({
             text: values.thread,
@@ -116,7 +124,7 @@ function PostThread({ userId }: Props) {
               <FormLabel className="thread-form_image-label">
                 {field.value ? (
                   <Image
-                    src={field.value}
+                    src={field.value }
                     alt="image"
                     width={96}
                     height={96}
@@ -169,4 +177,4 @@ function PostThread({ userId }: Props) {
   );
 }
 
-export default PostThread;
+export default UpdateThreadForm

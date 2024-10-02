@@ -1,13 +1,17 @@
-import { deleteThread, fetchAllChildThreads } from "@/lib/actions/thread.actions";
+import {
+  deleteThread,
+  fetchAllChildThreads,
+} from "@/lib/actions/thread.actions";
 import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import DeleteButton from "../DeleteButton";
+import EditButton from "../EditButton";
 
 interface Props {
   id: string;
   curUserId: string;
-  curThreadId: string
+  curThreadId: string;
   currentUserId: string;
   parentId: string | null;
   content: string;
@@ -28,6 +32,7 @@ interface Props {
     };
   }[];
   isComment?: boolean;
+  image: string;
 }
 
 const ThreadCard = async ({
@@ -41,9 +46,11 @@ const ThreadCard = async ({
   comments,
   isComment,
   curUserId,
-  curThreadId
+  curThreadId,
+  image,
 }: Props) => {
   const countComments = await fetchAllChildThreads(id);
+
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
@@ -71,6 +78,17 @@ const ThreadCard = async ({
                 {author.name}
               </h4>
             </Link>
+            {image.length > 0 && (
+              <div className="mt-4">
+                <Image
+                  src={image}
+                  alt="Thread Image"
+                  width={200} // Adjust this based on your design
+                  height={400} // Adjust height to maintain aspect ratio
+                  className="rounded-lg object-contain" // Ensures it fits in the container
+                />
+              </div>
+            )}
 
             <p className="mt-2 text-small-regular text-light-2">{content}</p>
             <div className={`mt-5 flex flex-col gap-3`}>
@@ -105,8 +123,11 @@ const ThreadCard = async ({
                   height={24}
                   className="cursor-pointer object-contain"
                 />
-                {curUserId === curThreadId  && parentId == null && (
+                {curUserId === curThreadId && parentId == null && (
                   <DeleteButton threadId={id} />
+                )}
+                {curUserId === curThreadId && parentId == null && (
+                  <EditButton threadId={id} />
                 )}
               </div>
 
@@ -139,7 +160,7 @@ const ThreadCard = async ({
         {/*TODO: Show comment logos */}
       </div>
       {!community ? (
-        <div className="mt-5 flex items-center mb-10">
+        <div className="mt-5 flex items-center mb-10 flex-row justify-between">
           <p className="text-subtle-medium text-gray-1">
             {formatDateString(createdAt)}
           </p>

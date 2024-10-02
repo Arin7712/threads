@@ -21,7 +21,7 @@ export default async function Home(){
     console.log("current suer",curUser._id)
   
     const threadsWithAuthorCheck = result.posts.map((post) => {
-      console.log("Thread author:", post.author._id); // Log the author of each thread
+      console.log("Thread author:", post.author._id, post.image); // Log the author of each thread
   
       // Check if the current user's ID matches the author of the thread
       const isAuthor = curUser._id.toString() === post.author._id.toString();
@@ -60,6 +60,7 @@ export default async function Home(){
             comments={post.children}
             curUserId={curUser._id.toString()}
             curThreadId={post.author._id.toString()}
+            image={post.image.toString()}
             />
           ))}
           </>

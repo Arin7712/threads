@@ -15,7 +15,7 @@
 
   /* Activity */
   .activity-card {
-    @apply flex items-center gap-2 rounded-md bg-dark-2 px-7 py-4;
+    @apply flex justify-between items-center gap-2 rounded-md bg-dark-2 px-7 py-4;
   }
 
   /* No Result */
@@ -29,7 +29,7 @@
   }
 
   .community-card_btn {
-    @apply rounded-lg bg-primary-500 px-5 py-1.5 text-small-regular !text-light-1 !important;
+    @apply rounded-lg bg-primary-500 px-4 py-1 text-small-regular !text-light-1 !important;
   }
 
   /* thread card  */

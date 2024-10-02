@@ -27,11 +27,19 @@ function CommunityCard({ id, name, username, imgUrl, bio, members }: Props) {
           />
         </Link>
 
-        <div>
+        <div className="flex flex-row items-center gap-36">
+          <div className="flex-grow">
           <Link href={`/communities/${id}`}>
             <h4 className='text-base-semibold text-light-1'>{name}</h4>
           </Link>
           <p className='text-small-medium text-gray-1'>@{username}</p>
+          </div>
+
+          <div>{members.length > 0 && (
+              <p className='ml-1 text-subtle-medium text-gray-1'>
+                {members.length} members
+              </p>
+            )}</div>
         </div>
       </div>
 

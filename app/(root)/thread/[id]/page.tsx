@@ -32,6 +32,8 @@ const Page = async({params}: {params : {id: string}}) => {
             createdAt={thread.createdAt}
             comments={thread.children}
             curThreadId={thread._id}
+            curUserId={user?.id || ''}
+            image={thread.image}
         />
         </div>
 
@@ -54,6 +56,8 @@ const Page = async({params}: {params : {id: string}}) => {
                 createdAt={childItem.createdAt}
                 comments={childItem.children}
                 curThreadId={childItem._id}
+                curUserId={user?.id || ''}
+                image={thread.image}
                 isComment
             />
             ))}

@@ -7,6 +7,7 @@ import { connectToDB } from "../mongoose";
 import User from "../models/user.model";
 import Thread from "../models/thread.model";
 import Community from "../models/community.model";
+import mongoose from "mongoose";
 
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
   connectToDB();
@@ -53,9 +54,10 @@ interface Params {
   author: string,
   communityId: string | null,
   path: string,
+  image: string | '',
 }
 
-export async function createThread({ text, author, communityId, path }: Params
+export async function createThread({ text, author, communityId, path, image }: Params
 ) {
   try {
     connectToDB();
@@ -69,6 +71,7 @@ export async function createThread({ text, author, communityId, path }: Params
       text,
       author,
       community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
+      image,
     });
 
     // Update User model
@@ -237,5 +240,32 @@ export async function deleteThread(id: string, path: string): Promise<void> {
     revalidatePath(path);
   } catch (error: any) {
     throw new Error(`Failed to delete thread: ${error.message}`);
+  }
+}
+
+export async function updateThread({
+  text,
+  image,
+  }: Params, threadId: string): Promise<void> {
+  try {
+    connectToDB();
+
+    // Resolve the community ID if provided
+
+      // Convert threadId string to ObjectId
+
+    await Thread.findOneAndUpdate(
+      {_id: threadId},
+      {
+        text,
+        image,
+        },
+      { new: true }
+    );
+
+  
+
+  } catch (error: any) {
+    throw new Error(`Failed to create/update thread: ${error.message}`);
   }
 }
