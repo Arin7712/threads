@@ -90,20 +90,20 @@ interface Props {
               text: values.thread,
               author: userId,
               communityId: null,
-              path: pathname,
+              path: '/',
               image: values.image || '',
             },
             threadId
           );
           console.log('Changes done')
     } else {
-        await createThread({
+        await updateThread({
             text: values.thread,
             author: userId,
             communityId: organization.id,
-            path: pathname,
+            path: '/',
             image: values.image || '', // Use the uploaded image URL
-        });
+        }, threadId);
     }
 
     router.push("/");

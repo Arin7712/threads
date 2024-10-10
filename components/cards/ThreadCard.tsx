@@ -1,12 +1,20 @@
+
 import {
   deleteThread,
   fetchAllChildThreads,
+  fetchThreadById,
+  likeThread,
 } from "@/lib/actions/thread.actions";
 import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import DeleteButton from "../DeleteButton";
+import Nothing from "../shared/Nothing"
 import EditButton from "../EditButton";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { fetchCurrentUser, fetchUser } from "@/lib/actions/user.actions";
+import { revalidatePath } from "next/cache";
 
 interface Props {
   id: string;
@@ -35,7 +43,7 @@ interface Props {
   image: string;
 }
 
-const ThreadCard = async ({
+const ThreadCard =  async({
   id,
   currentUserId,
   parentId,
@@ -49,7 +57,15 @@ const ThreadCard = async ({
   curThreadId,
   image,
 }: Props) => {
-  const countComments = await fetchAllChildThreads(id);
+
+  const countComments = await fetchAllChildThreads(id)
+  const fetchThread = await fetchThreadById(id)
+  const user = await currentUser();
+  const checkLike = fetchThread.likes.includes(curUserId);
+  console.log('CHECKLIKE', checkLike)
+  if(!user)redirect('/sign-in')
+    const userInfo = await fetchUser(user.id);
+    console.log('CURRENTUSER:', curUserId.toString())
 
   return (
     <article
@@ -92,14 +108,14 @@ const ThreadCard = async ({
 
             <p className="mt-2 text-small-regular text-light-2">{content}</p>
             <div className={`mt-5 flex flex-col gap-3`}>
-              <div className="flex gap-3.5">
-                <Image
+              <div className="flex gap-3.5 items-center">
+                {/*<Image
                   src="/assets/heart-gray.svg"
                   alt="heart"
                   width={24}
                   height={24}
                   className="cursor-pointer object-contain"
-                />
+                />*/}
                 <Link href={`/thread/${id}`}>
                   <Image
                     src="/assets/reply.svg"
@@ -111,24 +127,20 @@ const ThreadCard = async ({
                 </Link>
                 <Image
                   src="/assets/repost.svg"
-                  alt="heart"
+                  alt="repost"
                   width={24}
                   height={24}
                   className="cursor-pointer object-contain"
                 />
                 <Image
                   src="/assets/share.svg"
-                  alt="heart"
+                  alt="share"
                   width={24}
                   height={24}
                   className="cursor-pointer object-contain"
                 />
-                {curUserId === curThreadId && parentId == null && (
-                  <DeleteButton threadId={id} />
-                )}
-                {curUserId === curThreadId && parentId == null && (
-                  <EditButton threadId={id} />
-                )}
+                <Nothing threadId={id} userId={curUserId} likeState={checkLike}/>
+                <div className="text-white">{fetchThread.likes.length}</div>         
               </div>
 
               {countComments.length > 0 && (
@@ -164,14 +176,23 @@ const ThreadCard = async ({
           <p className="text-subtle-medium text-gray-1">
             {formatDateString(createdAt)}
           </p>
+          <div className="flex flex-row gap-2 items-center">
+          {curUserId === curThreadId && parentId == null && (
+                  <DeleteButton threadId={id} />
+                )}
+                {curUserId === curThreadId && parentId == null && (
+                  <EditButton threadId={id} />
+                )}
+          </div>
         </div>
       ) : (
         <></>
       )}
       {!isComment && community && (
+        <div className="mt-5 flex items-center mb-10 flex-row justify-between">
         <Link
           href={`/communities/${community.id}`}
-          className="mt-5 flex items-center"
+          className="flex items-center"
         >
           <p className="text-subtle-medium text-gray-1">
             {formatDateString(createdAt)} -{" "}
@@ -186,6 +207,15 @@ const ThreadCard = async ({
             className="ml-1 rounded-full object-cover"
           />
         </Link>
+        <div className="flex flex-row gap-2 items-center">
+        {curUserId === curThreadId && parentId == null && (
+                <DeleteButton threadId={id} />
+              )}
+        {curUserId === curThreadId && parentId == null && (
+                <EditButton threadId={id} />
+              )}
+        </div>
+        </div>
       )}
     </article>
   );

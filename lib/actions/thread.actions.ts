@@ -1,9 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-
 import { connectToDB } from "../mongoose";
-
 import User from "../models/user.model";
 import Thread from "../models/thread.model";
 import Community from "../models/community.model";
@@ -72,6 +70,7 @@ export async function createThread({ text, author, communityId, path, image }: P
       author,
       community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
       image,
+      likes: [],
     });
 
     // Update User model
@@ -189,9 +188,10 @@ export async function addCommentToThread(
 
 export async function deleteThread(id: string, path: string): Promise<void> {
   try {
+    // Connect to the database
     connectToDB();
 
-    // Find the thread to be deleted (the main thread)
+    // Find the main thread to be deleted
     const mainThread = await Thread.findById(id).populate("author community");
 
     if (!mainThread) {
@@ -201,23 +201,24 @@ export async function deleteThread(id: string, path: string): Promise<void> {
     // Fetch all child threads and their descendants recursively
     const descendantThreads = await fetchAllChildThreads(id);
 
-    // Get all descendant thread IDs including the main thread ID and child thread IDs
+    // Get all descendant thread IDs, including the main thread ID and child thread IDs
     const descendantThreadIds = [
       id,
       ...descendantThreads.map((thread) => thread._id),
     ];
 
-    // Extract the authorIds and communityIds to update User and Community models respectively
+    // Extract the authorIds to update the User model
     const uniqueAuthorIds = new Set(
       [
-        ...descendantThreads.map((thread) => thread.author?._id?.toString()), // Use optional chaining to handle possible undefined values
+        ...descendantThreads.map((thread) => thread.author?._id?.toString()), // Handle possible undefined values
         mainThread.author?._id?.toString(),
       ].filter((id) => id !== undefined)
     );
 
+    // Extract the communityIds to update the Community model
     const uniqueCommunityIds = new Set(
       [
-        ...descendantThreads.map((thread) => thread.community?._id?.toString()), // Use optional chaining to handle possible undefined values
+        ...descendantThreads.map((thread) => thread.community?._id?.toString()), // Handle possible undefined values
         mainThread.community?._id?.toString(),
       ].filter((id) => id !== undefined)
     );
@@ -225,23 +226,25 @@ export async function deleteThread(id: string, path: string): Promise<void> {
     // Recursively delete child threads and their descendants
     await Thread.deleteMany({ _id: { $in: descendantThreadIds } });
 
-    // Update User model
+    // Update User model: Remove the deleted thread IDs from users' `threads` array
     await User.updateMany(
       { _id: { $in: Array.from(uniqueAuthorIds) } },
-      { $pull: { threads: { $in: descendantThreadIds } } }
+      { $pull: { threads: { $in: descendantThreadIds } } } // Correct $pull syntax
     );
 
-    // Update Community model
+    // Update Community model: Remove the deleted thread IDs from communities' `threads` array
     await Community.updateMany(
       { _id: { $in: Array.from(uniqueCommunityIds) } },
-      { $pull: { threads: { $in: descendantThreadIds } } }
+      { $pull: { threads: { $in: descendantThreadIds } } } // Correct $pull syntax
     );
 
+    // Revalidate the path to update the UI
     revalidatePath(path);
   } catch (error: any) {
     throw new Error(`Failed to delete thread: ${error.message}`);
   }
 }
+
 
 export async function updateThread({
   text,
@@ -269,3 +272,29 @@ export async function updateThread({
     throw new Error(`Failed to create/update thread: ${error.message}`);
   }
 }
+
+
+export const likeThread = async (threadId: string, userId: string) => {
+  try {
+    const thread = await Thread.findById(threadId);
+
+    if (!thread) {
+      throw new Error('Thread not found.');
+    }
+
+    // Check if the user has already liked the thread
+    if (thread.likes.includes(userId)) {
+      thread.likes.remove(userId);
+      await thread.save();
+      throw new Error('You have already liked this thread.');
+    }
+
+    // Add user ID to likes array (as string)
+    thread.likes.push(userId);
+    await thread.save();
+
+    return { success: true, message: 'Thread liked successfully!' };
+  } catch (error: any) {
+    return { success: false, message: error.message };
+  }
+};

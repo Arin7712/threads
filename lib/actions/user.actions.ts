@@ -19,7 +19,7 @@ export async function fetchUser(userId: string) {
       model: Community,
     });
   } catch (error: any) {
-    throw new Error(`Failed to fetch user: ${error.message}`);
+    console.log(`Failed to fetch user: ${error.message}`);
   }
 }
 
@@ -59,7 +59,7 @@ export async function updateUser({
       revalidatePath(path);
     }
   } catch (error: any) {
-    throw new Error(`Failed to create/update user: ${error.message}`);
+    console.log(`Failed to create/update user: ${error.message}`);
   }
 }
 
@@ -183,6 +183,40 @@ export async function getActivity(userId: string) {
   }
 }
 
+export async function getLikeActivity(userId: string){
+  
+  try {
+    connectToDB();
+
+    // Find all threads created by the user
+    const userThreads = await Thread.find({ author: userId });
+
+    // Collect all the child thread ids (likes) from the 'children' field of each user thread
+    const likesUsersIds = userThreads.reduce((acc: any[], thread) => {
+      return acc.concat(thread.likes);
+    }, []);
+
+    if (likesUsersIds.length === 0) {
+      return []; // Return empty array if no likes found
+    }
+
+
+    // Find and return the child threads (replies) excluding the ones created by the same user
+    const likedByUsers = await User.find({
+      _id: { $in: likesUsersIds, $ne : userId },
+    }).select("name image id");
+
+    return likedByUsers.map((user) => ({
+      id: user.id, // Use the custom 'id' field
+      name: user.name,
+      image: user.image,
+    }));
+
+  } catch (error : any) {
+    console.log(`Error while fetching the threads activity`, error.message);
+    return [];
+  }
+}
 
 export async function fetchCurrentUser() {
   try {

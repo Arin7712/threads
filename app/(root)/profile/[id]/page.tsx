@@ -6,6 +6,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from '../../../../components/u
 import { profileTabs } from "@/constants";
 import Image from "next/image";
 import ThreadsTab from "@/components/shared/ThreadsTab";
+import RepliesCard from "@/components/cards/RepliesCard";
 
 async function Page({params} : {params: {id: string}}){
     const user = await currentUser();
@@ -15,6 +16,7 @@ async function Page({params} : {params: {id: string}}){
     const userInfo = await fetchUser(params.id);
 
     if(!userInfo?.onboarded) redirect('/onboarding');
+    
     return (
         <section>
             <ProfileHeader
@@ -43,11 +45,18 @@ async function Page({params} : {params: {id: string}}){
                             </TabsTrigger>
                         ))}
                     </TabsList>
-                    {profileTabs.map((tab) => (
-                        <TabsContent key={`content-${tab.label}`} value={tab.value} className="w-full text-light-1">
-                            <ThreadsTab currentUserId={user.id} accountId={userInfo.id} accountType="User"/>
-                        </TabsContent>
-                    ))}
+                    <TabsContent key={`content-Replies`} value="replies" className="w-full text-light-1">
+                        <RepliesCard/>
+                    </TabsContent>
+
+                    <TabsContent key={`content-Threads`} value="threads" className="w-full text-light-1">
+                        <ThreadsTab currentUserId={user.id} accountId={userInfo.id} accountType="User"/>
+                    </TabsContent>
+
+                    <TabsContent key={`content-Tagged`} value="tagged" className="w-full text-light-1">
+                        tagged
+                    </TabsContent>
+
                 </Tabs>
             </div>
         </section>

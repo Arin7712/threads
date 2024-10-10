@@ -6,6 +6,8 @@ import Topbar from "@/components/shared/Topbar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
 import RightSidebar from "@/components/shared/RightSidebar";
 import Bottombar from "@/components/shared/Bottombar";
+import { Suspense } from "react";
+import Loading from "./Loading";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -40,7 +42,9 @@ export default function RootLayout({
 
           <section className="main-container">
             <div className="w-full max-w-4xl">
+      <Suspense fallback={<Loading/>}>
               {children}
+    </Suspense>
             </div>
           </section>
 

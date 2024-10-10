@@ -16,6 +16,10 @@ const threadSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }, 
+    editedAt: {
+        type: Date,
+        default: Date.now
+    },
     parentId: {
         type: String
     },
@@ -23,6 +27,11 @@ const threadSchema = new mongoose.Schema({
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Thread'
+        }
+    ], likes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
         }
     ]
 })

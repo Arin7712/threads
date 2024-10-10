@@ -18,11 +18,8 @@ export default async function Home(){
   }
 
     const curUser = await fetchCurrentUser();
-    console.log("current suer",curUser._id)
   
-    const threadsWithAuthorCheck = result.posts.map((post) => {
-      console.log("Thread author:", post.author._id, post.image); // Log the author of each thread
-  
+    const threadsWithAuthorCheck = result.posts.map((post) => {  
       // Check if the current user's ID matches the author of the thread
       const isAuthor = curUser._id.toString() === post.author._id.toString();
   
@@ -42,6 +39,14 @@ export default async function Home(){
   return(
     <>
       <h1 className="head-text text-left ">Threads</h1>
+      {/*<div className="w-full h-full min-h-[700px]">
+      <iframe
+        src="https://www.chatbase.co/chatbot-iframe/Ss0S_4ShD_JbnP6RMew2B"
+        className="w-full h-full"
+        frameBorder="0"
+        title="Chatbot"
+      ></iframe>
+    </div>*/}
       <section className="mt-9 flex flex-col gap-10">
         {result.posts.length === 0? (
           <p className="no-result">No threads found</p>
@@ -50,8 +55,8 @@ export default async function Home(){
           {result.posts.map((post) => (
             <ThreadCard
             key={post._id}
-            id={post._id}
-            currentUserId={user.id}
+            id={post._id.toString()}
+            currentUserId={user.id.toString()}
             parentId={post.parentId}
             content={post.text}
             author={post.author}

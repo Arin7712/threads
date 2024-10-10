@@ -37,6 +37,7 @@ function PostThread({ userId }: Props) {
   const {organization} = useOrganization();
 
 
+
   const form = useForm({
     resolver: zodResolver(ThreadValidation),
     defaultValues: {
@@ -85,7 +86,7 @@ function PostThread({ userId }: Props) {
             text: values.thread,
             author: userId,
             communityId: null,
-            path: pathname,
+            path: '/',
             image: values.image || '', // Use the uploaded image URL
         });
     } else {
@@ -93,15 +94,16 @@ function PostThread({ userId }: Props) {
             text: values.thread,
             author: userId,
             communityId: organization.id,
-            path: pathname,
+            path: '/',
             image: values.image || '', // Use the uploaded image URL
         });
     }
-
-    router.push("/");
+    router.push('/')
 };
 
   return (
+    <>
+    {loading && <div className="loading-spinner text-light-3">Loading...</div>} {/* Show loading component */}
     <Form {...form}>
       <form
         className='mt-10 flex flex-col justify-start gap-10'
@@ -166,6 +168,7 @@ function PostThread({ userId }: Props) {
         </Button>
       </form>
     </Form>
+    </>
   );
 }
 
