@@ -103,7 +103,6 @@ function PostThread({ userId }: Props) {
 
   return (
     <>
-    {loading && <div className="loading-spinner text-light-3">Loading...</div>} {/* Show loading component */}
     <Form {...form}>
       <form
         className='mt-10 flex flex-col justify-start gap-10'
