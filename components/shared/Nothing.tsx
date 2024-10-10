@@ -38,7 +38,6 @@ const Nothing = ({ threadId, userId, likeState }: Props) => {
       setIsLiked(true);
     } else {
       setIsLiked(false)
-      console.log("Error occurred while liking the thread");
     }
 
     

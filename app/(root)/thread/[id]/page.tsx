@@ -23,8 +23,8 @@ const Page = async({params}: {params : {id: string}}) => {
         <div>
         <ThreadCard
             key={thread._id}
-            id={thread._id}
-            currentUserId={user?.id || ""}
+            id={thread._id.toString()}
+            currentUserId={user?.id.toString() || ""}
             parentId={thread.parentId}
             content={thread.text}
             author={thread.author}
@@ -32,8 +32,8 @@ const Page = async({params}: {params : {id: string}}) => {
             createdAt={thread.createdAt}
             comments={thread.children}
             curThreadId={thread._id}
-            curUserId={user?.id || ''}
-            image={thread.image}
+            curUserId={curUser?._id.toString() || ''}
+            image={thread.image.toString()}
         />
         </div>
 

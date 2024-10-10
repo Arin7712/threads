@@ -8,6 +8,7 @@ import RightSidebar from "@/components/shared/RightSidebar";
 import Bottombar from "@/components/shared/Bottombar";
 import { Suspense } from "react";
 import Loading from "./Loading";
+import SubTopbar from "@/components/shared/SubTopbar";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -39,7 +40,6 @@ export default function RootLayout({
         <Topbar/>
         <main className="flex flex-row">
           <LeftSidebar/>
-
           <section className="main-container">
             <div className="w-full max-w-4xl">
       <Suspense fallback={<Loading/>}>

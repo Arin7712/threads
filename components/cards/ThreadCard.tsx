@@ -139,8 +139,13 @@ const ThreadCard =  async({
                   height={24}
                   className="cursor-pointer object-contain"
                 />
-                <Nothing threadId={id} userId={curUserId} likeState={checkLike}/>
-                <div className="text-white">{fetchThread.likes.length}</div>         
+                  {fetchThread.parentId? <></> : <>
+                  
+                    <Nothing threadId={id} userId={curUserId} likeState={checkLike}/>
+                    <div className="text-white">{fetchThread.likes.length}</div>      
+                  </>
+                  }
+                
               </div>
 
               {countComments.length > 0 && (

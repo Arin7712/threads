@@ -87,7 +87,7 @@ export async function createThread({ text, author, communityId, path, image }: P
 
     revalidatePath(path);
   } catch (error: any) {
-    throw new Error(`Failed to create thread: ${error.message}`);
+    console.log(`Failed to create thread: ${error.message}`);
   }
 }
 
@@ -143,7 +143,6 @@ export async function fetchThreadById(threadId: string) {
     return thread;
   } catch (err) {
     console.error("Error while fetching thread:", err);
-    throw new Error("Unable to fetch thread");
   }
 }
 
@@ -182,7 +181,6 @@ export async function addCommentToThread(
     revalidatePath(path);
   } catch (err) {
     console.error("Error while adding comment:", err);
-    throw new Error("Unable to add comment");
   }
 }
 
@@ -241,7 +239,7 @@ export async function deleteThread(id: string, path: string): Promise<void> {
     // Revalidate the path to update the UI
     revalidatePath(path);
   } catch (error: any) {
-    throw new Error(`Failed to delete thread: ${error.message}`);
+    console.log(`Failed to delete thread: ${error.message}`);
   }
 }
 
@@ -269,13 +267,15 @@ export async function updateThread({
   
 
   } catch (error: any) {
-    throw new Error(`Failed to create/update thread: ${error.message}`);
+    console.log(`Failed to create/update thread: ${error.message}`);
   }
 }
 
 
 export const likeThread = async (threadId: string, userId: string) => {
   try {
+    connectToDB();
+    
     const thread = await Thread.findById(threadId);
 
     if (!thread) {
@@ -284,7 +284,7 @@ export const likeThread = async (threadId: string, userId: string) => {
 
     // Check if the user has already liked the thread
     if (thread.likes.includes(userId)) {
-      thread.likes.remove(userId);
+      thread.likes.remove(userId)
       await thread.save();
       throw new Error('You have already liked this thread.');
     }

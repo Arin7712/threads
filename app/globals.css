@@ -59,7 +59,11 @@
   }
 
   .topbar {
-    @apply fixed top-0 z-30 flex w-full items-center justify-between bg-dark-2 px-6 py-3;
+    @apply fixed top-0 z-30 flex w-full items-center justify-between bg-dark-2 px-6 py-3;height:60px
+  }
+
+  .sub_topbar {
+    @apply fixed z-30 flex w-full items-center justify-evenly bg-dark-2 px-6 py-3 overflow-x-auto whitespace-nowrap;top:60px
   }
 
   .bottombar {
