@@ -17,6 +17,7 @@ async function Page({params} : {params: {id: string}}){
         <section>
             <ProfileHeader
             accountId={communityDetails.id}
+            curUserId={user.id}
             authUserId={user.id}
             name={communityDetails.name}
             username={communityDetails.username}
@@ -47,15 +48,17 @@ async function Page({params} : {params: {id: string}}){
 
                         <TabsContent value='members' className="w-full text-light-1">
                             <section className="mt-9 flex flex-col gap-10">
-                                {communityDetails?.members.map((member: any) => (
+                                {communityDetails?.members.map((person: any) => (
                                     <UserCard
-                                    key={member.id}
-                                    id={member.id}
-                                    name={member.name}
-                                    username={member.username}
-                                    imgUrl={member.image}
+                                    key={person.id}
+                                    currentUserId={user.id}
+                                    followId={person._id.toString()}
+                                    id={person.id}
+                                    name={person.name}
+                                    username={person.username}
+                                    imgUrl={person.image}
                                     personType="User"
-                                    />
+                                  />
                                 ))}
                             </section>
                         </TabsContent>

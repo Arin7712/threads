@@ -1,13 +1,12 @@
 'use client'
 import { deleteThread } from "@/lib/actions/thread.actions";
-import { useRouter } from "next/navigation";
 
 interface DeleteButtonProps {
   threadId: string;
+  onAction: () => void
 }
 
-const DeleteButton = ({ threadId}: DeleteButtonProps) => {
-  const router = useRouter();
+const DeleteButton = ({ threadId, onAction}: DeleteButtonProps) => {
 
   const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this thread?")) {
@@ -17,10 +16,11 @@ const DeleteButton = ({ threadId}: DeleteButtonProps) => {
         console.error("Failed to delete thread:", error);
       }
     }
+    onAction();
   };
 
   return (
-    <button onClick={handleDelete} className="text-red-500">
+    <button onClick={handleDelete} className="text-light-3">
       Delete
     </button>
   );

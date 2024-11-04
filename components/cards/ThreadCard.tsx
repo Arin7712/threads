@@ -15,6 +15,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { fetchCurrentUser, fetchUser } from "@/lib/actions/user.actions";
 import { revalidatePath } from "next/cache";
+import ThreadShare from "../shared/ShareThread";
+import ThreadActionDialog from "../shared/ThreadActionDialog";
 
 interface Props {
   id: string;
@@ -89,11 +91,16 @@ const ThreadCard =  async({
           </div>
 
           <div className="flex w-full flex-col">
+            <div className="flex flex-row justify-between">
             <Link href={`/profile/${author.id}`} className="w-fit">
               <h4 className="cursor-pointer text-base-semibold text-light-1">
                 {author.name}
               </h4>
             </Link>
+            {curUserId === curThreadId && parentId == null && (
+                  <ThreadActionDialog threadId={id}/> // contains the edit and delete buttons
+            )}
+            </div>
             {image.length > 0 && (
               <div className="mt-4">
                 <Image
@@ -105,6 +112,7 @@ const ThreadCard =  async({
                 />
               </div>
             )}
+            
 
             <p className="mt-2 text-small-regular text-light-2">{content}</p>
             <div className={`mt-5 flex flex-col gap-3`}>
@@ -139,6 +147,7 @@ const ThreadCard =  async({
                   height={24}
                   className="cursor-pointer object-contain"
                 />
+                
                   {fetchThread.parentId? <></> : <>
                   
                     <Nothing threadId={id} userId={curUserId} likeState={checkLike}/>
@@ -183,10 +192,12 @@ const ThreadCard =  async({
           </p>
           <div className="flex flex-row gap-2 items-center">
           {curUserId === curThreadId && parentId == null && (
-                  <DeleteButton threadId={id} />
+                  // <DeleteButton threadId={id} />
+                  <></>
                 )}
                 {curUserId === curThreadId && parentId == null && (
-                  <EditButton threadId={id} />
+                  // <EditButton threadId={id} />
+                  <></>
                 )}
           </div>
         </div>
@@ -214,10 +225,12 @@ const ThreadCard =  async({
         </Link>
         <div className="flex flex-row gap-2 items-center">
         {curUserId === curThreadId && parentId == null && (
-                <DeleteButton threadId={id} />
+                // <DeleteButton threadId={id} />
+                <></>
               )}
         {curUserId === curThreadId && parentId == null && (
-                <EditButton threadId={id} />
+                // <EditButton threadId={id} />
+                <></>
               )}
         </div>
         </div>

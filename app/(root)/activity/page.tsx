@@ -8,11 +8,10 @@ import { redirect } from "next/navigation";
 async function Page() {
   const user = await currentUser();
 
-  if (!user) return null;
+  if (!user) redirect("/onboarding");
 
   const userInfo = await fetchUser(user.id);
 
-  if (!userInfo?.onboarded) redirect("/onboarding");
 
   // getActivity
   const activity = await getActivity(userInfo._id);

@@ -20,7 +20,7 @@ interface Props {
   followId: string;
 }
 
-const UserCard = ({
+const UserCardSidebar = ({
   id,
   name,
   username,
@@ -72,8 +72,8 @@ const UserCard = ({
   };
 
   return (
-    <article className="user-card">
-      <div className="user-card_avatar">
+    <article className="user-card space-x-4">
+      <div className="user-card_avatar" onClick={() => router.push(`/profile/${id}`)}>
         <Image
           src={imgUrl}
           alt="logo"
@@ -91,14 +91,8 @@ const UserCard = ({
       <Button className="user-card_btn" onClick={handleFollow}>
         {isFollowing ? "unfollow" : "follow"}
       </Button>
-      <Button
-        className="user-card_btn"
-        onClick={() => router.push(`/profile/${id}`)}
-      >
-        View
-      </Button>
     </article>
   );
 };
 
-export default UserCard;
+export default UserCardSidebar;

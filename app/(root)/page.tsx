@@ -20,6 +20,8 @@ export default async function Home(){
     const curUser = await fetchCurrentUser();
   
     const threadsWithAuthorCheck = result.posts.map((post) => {  
+
+      if(curUser._id.toString() && post.author._id.toString()){
       // Check if the current user's ID matches the author of the thread
       const isAuthor = curUser._id.toString() === post.author._id.toString();
   
@@ -34,7 +36,7 @@ export default async function Home(){
         ...post, // Spread the existing post properties
         isAuthor, // Add the isAuthor flag to the post
       };
-    });
+}});
 
   return(
     <>

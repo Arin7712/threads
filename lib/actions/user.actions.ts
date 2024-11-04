@@ -7,6 +7,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import Community from "../models/community.model";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
+import mongoose from "mongoose";
 
 import { connectToDB } from "../mongoose";
 
@@ -218,6 +219,8 @@ export async function getLikeActivity(userId: string){
   }
 }
 
+
+
 export async function fetchCurrentUser() {
   try {
     const clerkUser = await currentUser(); // Fetch the logged-in user from Clerk
@@ -242,5 +245,125 @@ export async function fetchCurrentUser() {
   } catch (error) {
     console.error("Error fetching user:", error);
     throw error;
+  }
+}
+
+export async function followUser(userId: string, targetUserId: string){
+  try {
+
+    await connectToDB();
+
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const targetUserObjectId = new mongoose.Types.ObjectId(targetUserId);
+
+    const user = await User.findById(userObjectId);
+    const targetUser = await User.findById(targetUserObjectId);
+
+    if(!user || !targetUser)
+      throw new Error('Cannot find user')
+
+
+    // check if the user is already following the target user
+    if(!user.following.includes(targetUserObjectId)){
+      user.following.push(targetUserObjectId)
+      targetUser.followers.push(userObjectId)
+
+      await user.save();
+      await targetUser.save();
+
+      return {success: true, message: "User followed successfully"}
+    }else{
+      return {success: false, message: "try unfollow"}
+          
+        }}
+
+      // unfollow the user if already following
+catch (error: any) {
+    console.log(`Error while following/unfollowing user`, error)
+  }
+
+}
+
+export async function unfollowUser(userId: string, targetUserId: string){
+try {
+  await connectToDB();
+
+  const userObjectId = new mongoose.Types.ObjectId(userId);
+    const targetUserObjectId = new mongoose.Types.ObjectId(targetUserId);
+
+    const user = await User.findById(userObjectId);
+    const targetUser = await User.findById(targetUserObjectId);
+
+  user.following = user.following.filter((id: string) => id.toString() !== targetUserId)
+            targetUser.followers = targetUser.followers.filter((id: string) => id.toString() !== userId)
+      
+            await user.save();
+            await targetUser.save();
+      
+            return { success: false, message: 'User unfollowed successfully!' };}
+
+ catch (error) {
+    return {success: false, error}
+}}
+
+export async function fetchFollowing(userId: string){
+  try {
+    await connectToDB();
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+    const user = await User.findById(userId);
+
+    if(!user){
+      console.log("Error fetching user")
+    }
+
+    return user?.following;
+
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export async function fetchFollowerDetails(userId: string){
+  try {
+    await connectToDB();
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const user = await User.findById(userObjectId).populate("followers")
+
+    const followerDetails = user.followers.map((follower: any) => ({
+      id: follower._id,
+      ...follower.toObject(),
+    }));
+
+    if(!user){
+      console.log("Error with user")
+    }
+
+    return followerDetails;
+
+  } catch (error) {
+    console.log("error fetching follower details")
+  }
+}
+
+export async function fetchFollowingDetails(userId: string){
+  try {
+    await connectToDB();
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const user = await User.findById(userObjectId).populate("following")
+
+    const followingDetails = user.following.map((follower: any) => ({
+      id: follower._id,
+      ...follower.toObject(),
+    }));
+
+    if(!user){
+      console.log("Error with user")
+    }
+
+    return followingDetails;
+
+  } catch (error) {
+    console.log("error fetching following details")
   }
 }

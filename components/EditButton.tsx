@@ -4,17 +4,19 @@ import { redirect, useRouter } from "next/navigation";
 
 interface DeleteButtonProps {
   threadId: string;
+  onAction: () => void
 }
 
-const EditButton = ({ threadId}: DeleteButtonProps) => {
+const EditButton = ({ threadId, onAction}: DeleteButtonProps) => {
   const router = useRouter();
 
   const navigateToEdit = async () => {
+    onAction();
     router.push(`/update-thread/${threadId}`);
   };
 
   return (
-    <button onClick={navigateToEdit} className="text-red-500">
+    <button onClick={navigateToEdit} className="text-light-3">
       Edit
     </button>
   );
