@@ -42,6 +42,7 @@ async function Page({ params }: { params: { id: string } }) {
         imgUrl={userInfo.image}
         bio={userInfo.bio}
         curUserId={userInfo.id}
+        paramsId={params.id}
       />
 
       <div className="mt-9">

@@ -11,6 +11,7 @@ interface Props {
   imgUrl: string;
   bio: string;
   curUserId: string;
+  paramsId: string
   type?: "User" | "Community";
 }
 
@@ -24,13 +25,15 @@ const ProfileHeader = async ({
   type,
   curUserId,
   followId2,
+  paramsId
 }: Props) => {
   const user = await fetchCurrentUser();
   const userInfo = await fetchUser(user.id);
+  const userFollowInfo = await fetchUser(paramsId)
 
-  const followers = userInfo.followers.length;
-  const following = userInfo.following.length;
-  const threads = userInfo.threads.length;
+  const followers = userFollowInfo.followers.length;
+  const following = userFollowInfo.following.length;
+  const threads = userFollowInfo.threads.length;
 
   return (
     <div className="flex w-full flex-col justify-start">

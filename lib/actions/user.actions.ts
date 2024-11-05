@@ -92,7 +92,6 @@ export async function fetchUserPosts(userId: string) {
     return threads;
   } catch (error) {
     console.error("Error fetching user threads:", error);
-    throw error;
   }
 }
 
@@ -151,7 +150,6 @@ export async function fetchUsers({
     return { users, isNext };
   } catch (error) {
     console.error("Error fetching users:", error);
-    throw error;
   }
 }
 
