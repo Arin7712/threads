@@ -1,10 +1,12 @@
 import { fetchCurrentUser, fetchUser } from "@/lib/actions/user.actions";
 import Image from "next/image";
+import FollowBtn from "./FollowBtn";
 
 interface Props {
   accountId: string;
   authUserId: string;
   name: string;
+  followId2: string
   username: string;
   imgUrl: string;
   bio: string;
@@ -21,6 +23,7 @@ const ProfileHeader = async ({
   bio,
   type,
   curUserId,
+  followId2,
 }: Props) => {
   const user = await fetchCurrentUser();
   const userInfo = await fetchUser(user.id);
@@ -51,9 +54,19 @@ const ProfileHeader = async ({
             </div>
           </div>
           <div>
+
+          {accountId !== user.id && (
+
+<FollowBtn
+  id={userInfo.id}
+  currentUserId={userInfo._id.toString()}
+  followId={followId2}
+/>
+)}
             {authUserId === curUserId && (
               <div className="flex-shrink-0 justify-end">
                 {" "}
+                
                 {/* Prevents the button from shrinking */}
                 <a
                   className="text-light-2 bg-primary-500 text-small-regular p-2 rounded-md font-medium"
@@ -68,7 +81,7 @@ const ProfileHeader = async ({
       </div>
 
       {/*TODO: Community */}
-      <div className="flex w-full flex-row justify-between md:justify-evenly">
+      <div className="flex w-full flex-row justify-between md:justify-between">
         <p className="mt-6  text-base-regular text-light-2">
           {followers} followers
         </p>

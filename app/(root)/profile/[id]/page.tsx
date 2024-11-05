@@ -17,6 +17,7 @@ import Image from "next/image";
 import ThreadsTab from "@/components/shared/ThreadsTab";
 import RepliesCard from "@/components/cards/RepliesCard";
 import UserCard from "@/components/cards/UserCard";
+import FollowBtn from "@/components/shared/FollowBtn";
 
 async function Page({ params }: { params: { id: string } }) {
   const user = await currentUser();
@@ -24,7 +25,6 @@ async function Page({ params }: { params: { id: string } }) {
   if (!user) return null;
 
   const userInfo = await fetchUser(params.id);
-  console.log("ID:", userInfo._id);
 
   if (!userInfo?.onboarded) redirect("/onboarding");
 
@@ -38,6 +38,7 @@ async function Page({ params }: { params: { id: string } }) {
         authUserId={user.id}
         name={userInfo.name}
         username={userInfo.username}
+        followId2={userInfo._id.toString()}
         imgUrl={userInfo.image}
         bio={userInfo.bio}
         curUserId={userInfo.id}
@@ -130,7 +131,6 @@ async function Page({ params }: { params: { id: string } }) {
               />
             ))}
           </TabsContent>
-          
         </Tabs>
       </div>
     </section>

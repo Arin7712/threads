@@ -12,26 +12,18 @@ import {
 
 interface Props {
   id: string;
-  name: string;
-  username: string;
-  imgUrl: string;
-  personType: string;
   currentUserId: string;
   followId: string;
 }
 
-const UserCard = ({
+const FollowBtn = ({
   id,
-  name,
-  username,
-  imgUrl,
-  personType,
   currentUserId,
   followId,
 }: Props) => {
   const router = useRouter();
   const [isFollowing, setIsFollowing] = useState(false); // Initial follow state is set to false
-  
+  console.log("FOLLOWID", followId)
   // Fetch the follow status when the component mounts
   
   useEffect(() => {
@@ -73,32 +65,11 @@ const UserCard = ({
 
   return (
     <article className="user-card">
-      <div className="user-card_avatar">
-        <Image
-          src={imgUrl}
-          alt="logo"
-          width={48}
-          height={48}
-          className="rounded-full"
-        />
-
-        <div className="flex-1 text-ellipsis">
-          <h4 className="text-base-semibold text-light-1">{name}</h4>
-          <p className="text-small-medium text-gray-1">@{username}</p>
-        </div>
-      </div>
-
       <Button className="user-card_btn" onClick={handleFollow}>
         {isFollowing ? "unfollow" : "follow"}
-      </Button>
-      <Button
-        className="user-card_btn"
-        onClick={() => router.push(`/profile/${id}`)}
-      >
-        View
       </Button>
     </article>
   );
 };
 
-export default UserCard;
+export default FollowBtn;

@@ -220,6 +220,35 @@ export async function getLikeActivity(userId: string){
 }
 
 
+export async function fetchFollowActivity(userId: string) {
+  try {
+    await connectToDB();
+
+    // Find the user document by ID and populate followers' details
+    const user = await User.findById(userId)
+      .populate("followers", "username image id")
+      .exec();
+
+    if (!user) {
+      console.log("User not found");
+      return [];
+    }
+
+    // Extract followers' details
+    const followers = user.followers.map((follower: any) => ({
+      followerObjectId: follower._id,
+      followerUsername: follower.username,
+      followerImage: follower.image,
+      followerId: follower.id,
+    }));
+
+    return followers;
+  } catch (error) {
+    console.log("Error fetching follow activity:", error);
+    return [];
+  }
+}
+
 
 export async function fetchCurrentUser() {
   try {
