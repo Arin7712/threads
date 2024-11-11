@@ -3,6 +3,8 @@ import { fetchPosts } from "@/lib/actions/thread.actions";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { fetchCurrentUser, fetchUser } from "@/lib/actions/user.actions";
+import { Suspense, useState } from "react";
+import Loading from "./Loading";
 
 export default async function Home(){
   const result = await fetchPosts(1, 30);
@@ -39,15 +41,8 @@ export default async function Home(){
 
   return(
     <>
+    <Suspense fallback={<Loading/>}></Suspense>
       <h1 className="head-text text-left ">Threads</h1>
-      {/*<div className="w-full h-full min-h-[700px]">
-      <iframe
-        src="https://www.chatbase.co/chatbot-iframe/Ss0S_4ShD_JbnP6RMew2B"
-        className="w-full h-full"
-        frameBorder="0"
-        title="Chatbot"
-      ></iframe>
-    </div>*/}
       <section className="mt-9 flex flex-col gap-10">
         {result.posts.length === 0? (
           <p className="no-result">No threads found</p>

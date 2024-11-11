@@ -10,6 +10,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import Loading from "../Loading";
+import { Suspense } from "react";
 
 async function Page() {
   const user = await currentUser();
@@ -25,6 +27,7 @@ async function Page() {
 
   return (
     <section>
+      <Suspense fallback={<Loading/>}></Suspense>
       <h1 className="head-text mb-10">Activity</h1>
 
       <section className="mt-10 flex flex-col gap-5">

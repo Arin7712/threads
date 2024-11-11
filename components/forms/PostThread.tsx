@@ -33,6 +33,7 @@ function PostThread({ userId }: Props) {
   const [files, setFiles] = useState<File[]>([]);
   const { startUpload } = useUploadThing('media')
   const router = useRouter();
+  const[isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
   const {organization} = useOrganization();
 
@@ -69,6 +70,7 @@ function PostThread({ userId }: Props) {
   }
 
   const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
+    setIsLoading(true)
     const blob = values.image;
     if(blob){
       const hasImageChanged = isBase64Image(blob);
@@ -98,6 +100,7 @@ function PostThread({ userId }: Props) {
             image: values.image || '', // Use the uploaded image URL
         });
     }
+    setIsLoading(false);
     router.push('/')
 };
 
@@ -164,6 +167,9 @@ function PostThread({ userId }: Props) {
 
         <Button type='submit' className='bg-primary-500'>
           Post Thread
+          {isLoading && (
+            <Image src="/assets/loader.svg" alt="loader" width={20} height={20} className="ml-2 animate-spin"/>
+          )}
         </Button>
       </form>
     </Form>

@@ -5,6 +5,8 @@ import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { fetchCurrentUser } from "@/lib/actions/user.actions";
+import { Suspense } from "react";
+import Loading from "../../Loading";
 
 const Page = async({params}: {params : {id: string}}) => {
 
@@ -20,6 +22,7 @@ const Page = async({params}: {params : {id: string}}) => {
 
     return (
     <section className="relative">
+        <Suspense fallback={<Loading/>}></Suspense>
         <div>
         <ThreadCard
             key={thread._id}

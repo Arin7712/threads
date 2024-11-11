@@ -6,6 +6,8 @@ import ThreadsTab from "@/components/shared/ThreadsTab";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '../../../../components/ui/tabs'
 import { fetchCommunityDetails } from "@/lib/actions/community.actions";
 import UserCard from "@/components/cards/UserCard";
+import { Suspense } from "react";
+import Loading from "../../Loading";
 
 
 async function Page({params} : {params: {id: string}}){
@@ -15,6 +17,7 @@ async function Page({params} : {params: {id: string}}){
     const communityDetails = await fetchCommunityDetails(params.id)
     return (
         <section>
+            <Suspense fallback={<Loading/>}></Suspense>
             <ProfileHeader
             accountId={communityDetails.id}
             curUserId={user.id}

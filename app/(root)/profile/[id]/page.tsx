@@ -18,6 +18,8 @@ import ThreadsTab from "@/components/shared/ThreadsTab";
 import RepliesCard from "@/components/cards/RepliesCard";
 import UserCard from "@/components/cards/UserCard";
 import FollowBtn from "@/components/shared/FollowBtn";
+import { Suspense } from "react";
+import Loading from "../../Loading";
 
 async function Page({ params }: { params: { id: string } }) {
   const user = await currentUser();
@@ -33,6 +35,7 @@ async function Page({ params }: { params: { id: string } }) {
 
   return (
     <section>
+      <Suspense fallback={<Loading/>}>
       <ProfileHeader
         accountId={userInfo.id}
         authUserId={user.id}
@@ -134,6 +137,7 @@ async function Page({ params }: { params: { id: string } }) {
           </TabsContent>
         </Tabs>
       </div>
+      </Suspense>
     </section>
   );
 }

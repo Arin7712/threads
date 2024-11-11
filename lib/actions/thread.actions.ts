@@ -159,7 +159,7 @@ export async function addCommentToThread(
     const originalThread = await Thread.findById(threadId);
 
     if (!originalThread) {
-      throw new Error("Thread not found");
+      console.log("Thread not found");
     }
 
     // Create the new comment thread
@@ -272,7 +272,7 @@ export async function updateThread({
 }
 
 
-export const likeThread = async (threadId: string, userId: string) => {
+export const likeThread = async (threadId: string, userId: string, path: string) => {
   try {
     connectToDB();
     
@@ -296,5 +296,7 @@ export const likeThread = async (threadId: string, userId: string) => {
     return { success: true, message: 'Thread liked successfully!' };
   } catch (error: any) {
     return { success: false, message: error.message };
+  } finally{
+    revalidatePath(path);
   }
 };

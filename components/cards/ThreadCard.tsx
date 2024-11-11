@@ -61,13 +61,14 @@ const ThreadCard =  async({
 }: Props) => {
 
   const countComments = await fetchAllChildThreads(id)
-  const fetchThread = await fetchThreadById(id)
+  const fetchThread = await fetchThreadById(id);
+  const userLikes = fetchThread.likes.length;
   const user = await currentUser();
   const checkLike = fetchThread.likes.includes(curUserId);
   console.log('CHECKLIKE', checkLike)
   if(!user)redirect('/sign-in')
     const userInfo = await fetchUser(user.id);
-    console.log('CURRENTUSER:', curUserId.toString())
+    console.log('CURRENTUSER:', curUserId.toString());
 
   return (
     <article
@@ -150,8 +151,8 @@ const ThreadCard =  async({
                 
                   {fetchThread.parentId? <></> : <>
                   
-                    <Nothing threadId={id} userId={curUserId} likeState={checkLike}/>
-                    <div className="text-white">{fetchThread.likes.length}</div>      
+                    <Nothing threadId={id} userId={curUserId} likeState={checkLike} likesCount={userLikes}/>
+                    <div className="text-white">{userLikes}</div>      
                   </>
                   }
                 

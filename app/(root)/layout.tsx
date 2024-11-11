@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../globals.css";
@@ -6,9 +7,11 @@ import Topbar from "@/components/shared/Topbar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
 import RightSidebar from "@/components/shared/RightSidebar";
 import Bottombar from "@/components/shared/Bottombar";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Loading from "./Loading";
-import SubTopbar from "@/components/shared/SubTopbar";
+import { useRouter } from "next/router";
+import NextTopLoader from 'nextjs-toploader';
+
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -31,6 +34,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <ClerkProvider>
     <html lang="en">
@@ -42,9 +46,11 @@ export default function RootLayout({
           <LeftSidebar/>
           <section className="main-container">
             <div className="w-full max-w-4xl">
-      <Suspense fallback={<Loading/>}>
+            <Suspense fallback={<Loading/>}>
+            <NextTopLoader color="#b905fa"/>
               {children}
-    </Suspense>
+    
+        </Suspense>
             </div>
           </section>
 

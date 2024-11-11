@@ -11,10 +11,11 @@ import { profileTabs } from "@/constants";
 import Image from "next/image";
 import ThreadsTab from "@/components/shared/ThreadsTab";
 import UserCard from "@/components/cards/UserCard";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Searchbar from "@/components/shared/SearchBar";
 import Pagination from "@/components/shared/Pagination";
 import { object } from "zod";
+import Loading from "../Loading";
 
 async function Page({
   searchParams,
@@ -39,8 +40,12 @@ async function Page({
     pageNumber: searchParams?.page ? +searchParams.page : 1,
   });
 
+  if(!result){
+    return 0;
+  }
+
   if (
-    result.users
+    result?.users
       .map((i: string) => i.toString())
       .includes(userInfo._id.toString())
   ) {
@@ -49,17 +54,18 @@ async function Page({
 
   return (
     <section>
+      <Suspense fallback={<Loading/>}></Suspense>
       <h1 className="head-text mb-10">Search</h1>
 
       {/*Search bar*/}
       <Searchbar routeType="search" />
 
       <div className="mt-14 flex flex-col gap-9">
-        {result.users.length === 0 ? (
+        {result?.users.length === 0 ? (
           <p className="no-result">No users</p>
         ) : (
           <>
-            {result.users.map((person) => (
+            {result?.users.map((person) => (
               <UserCard
                 key={person.id}
                 currentUserId={curUser._id.toString()}

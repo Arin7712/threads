@@ -41,6 +41,7 @@ const AccountProfile = ({user, btnTitle} : Props) => {
   const {startUpload} = useUploadThing('media');
   const router = useRouter();
   const pathname = usePathname();
+  const[isLoading, setIsLoading] = useState(false);
 
     const form = useForm({
         resolver:zodResolver(userValidation),
@@ -73,6 +74,7 @@ const AccountProfile = ({user, btnTitle} : Props) => {
     }
 
       const onSubmit = async(values: z.infer<typeof userValidation>) => {
+        setIsLoading(true);
         const blob = values.profile_photo;
         const hasImageChanged = isBase64Image(blob);
 
@@ -94,8 +96,10 @@ const AccountProfile = ({user, btnTitle} : Props) => {
         });
 
         if(pathname === '/profile/edit'){
+          setIsLoading(false);
           router.back();
         }else{
+          setIsLoading(false);
           router.push('/');
         }
       }
@@ -196,7 +200,12 @@ const AccountProfile = ({user, btnTitle} : Props) => {
               </FormItem>
             )}
           />
-          <Button className="bg-primary-500" type="submit">Submit</Button>
+          <Button className="bg-primary-500" type="submit">
+            Submit
+            {isLoading && (
+            <Image src="/assets/loader.svg" alt="loader" width={20} height={20} className="ml-2 animate-spin"/>
+          )}
+            </Button>
         </form>
       </Form>
     )

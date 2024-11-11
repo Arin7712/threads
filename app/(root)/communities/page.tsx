@@ -6,6 +6,8 @@ import { currentUser } from "@clerk/nextjs/server";
 
 import { fetchUser } from "@/lib/actions/user.actions";
 import { fetchCommunities } from "@/lib/actions/community.actions";
+import Loading from "../Loading";
+import { Suspense } from "react";
 
 async function Page({
   searchParams,
@@ -26,6 +28,7 @@ async function Page({
 
   return (
     <>
+    <Suspense fallback={<Loading/>}></Suspense>
       <h1 className='head-text'>Communities</h1>
 
       <div className='mt-5'>
