@@ -24,6 +24,7 @@ import { ChangeEvent, useState } from "react";
 import { isBase64Image } from "@/lib/utils";
 import Image from "next/image";
 import { Input } from "../ui/input";
+import { useToast } from "@/hooks/use-toast"
 
 interface Props {
   userId: string;
@@ -36,6 +37,7 @@ function PostThread({ userId }: Props) {
   const[isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
   const {organization} = useOrganization();
+  const {toast} = useToast();
 
 
 
@@ -81,6 +83,7 @@ function PostThread({ userId }: Props) {
         }
       }
     }
+    
 
 
     if (!organization) {

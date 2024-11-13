@@ -11,6 +11,8 @@ import { Suspense, useEffect, useState } from "react";
 import Loading from "./Loading";
 import { useRouter } from "next/router";
 import NextTopLoader from 'nextjs-toploader';
+import { Toaster } from "@/components/ui/toaster"
+
 
 
 const geistSans = localFont({
@@ -49,6 +51,7 @@ export default function RootLayout({
             <Suspense fallback={<Loading/>}>
             <NextTopLoader color="#b905fa"/>
               {children}
+              <Toaster />
     
         </Suspense>
             </div>

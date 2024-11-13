@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 const ThreadTime = ({createdAt}: {createdAt: Date}) => {
 
     const [localTime, setLocalTime] = useState<string>("");
+    console.log("CREATED AT:", createdAt)
 
     useEffect(() => {
         // Client-side conversion to local time after the component mounts
@@ -12,7 +13,7 @@ const ThreadTime = ({createdAt}: {createdAt: Date}) => {
         setLocalTime(localTimeString);
       }, [createdAt]);
   return (
-    <div className='text-white'>
+    <div className="text-subtle-medium text-gray-1">
       {localTime}
     </div>
   )

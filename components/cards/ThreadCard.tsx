@@ -65,7 +65,6 @@ const ThreadCard =  async({
 }: Props) => {
 
   const countComments = await fetchAllChildThreads(id);
-  const localTime = new Date(createdAt).toLocaleString(); // Adjusts to user's local time zone
   const fetchThread = await fetchThreadById(id);
   const userLikes = fetchThread.likes.length;
   const user = await currentUser();
@@ -194,9 +193,8 @@ const ThreadCard =  async({
       </div>
       {!community ? (
         <div className="mt-5 flex items-center mb-10 flex-row justify-between">
-          <p className="text-subtle-medium text-gray-1">
+          <p>
             <ThreadTime createdAt={createdAt}/>
-            {localTime}
           </p>
           <div className="flex flex-row gap-2 items-center">
           {curUserId === curThreadId && parentId == null && (

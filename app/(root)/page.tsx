@@ -5,10 +5,15 @@ import { redirect } from "next/navigation";
 import { fetchCurrentUser, fetchUser } from "@/lib/actions/user.actions";
 import { Suspense, useState } from "react";
 import Loading from "./Loading";
+import { toast } from "sonner"
+
+
 
 export default async function Home(){
   const result = await fetchPosts(1, 30);
   const user = await currentUser();
+
+
 
   if(!user)redirect('/sign-in')
     const userInfo = await fetchUser(user.id);
@@ -37,6 +42,7 @@ export default async function Home(){
         ...post, // Spread the existing post properties
         isAuthor, // Add the isAuthor flag to the post
       };
+
 }});
 
   return(

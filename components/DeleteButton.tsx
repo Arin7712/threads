@@ -2,25 +2,18 @@
 import { deleteThread } from "@/lib/actions/thread.actions";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast"
+
 
 interface DeleteButtonProps {
   threadId: string;
-  createdAt: string
   onAction: () => void
 }
 
-const DeleteButton = ({ threadId, onAction, createdAt}: DeleteButtonProps) => {
-
-  const [localTime, setLocalTime] = useState<string>("");
-
-
-  useEffect(() => {
-    // Client-side conversion to local time after the component mounts
-    const localTimeString = new Date("2024-11-13T07:20:36.671+00:00").toLocaleString(); // Adjusts to user's local time zone
-    setLocalTime(localTimeString);
-  }, ["2024-11-13T07:20:36.671+00:00"]);
+const DeleteButton = ({ threadId, onAction}: DeleteButtonProps) => {
 
   const router = useRouter();
+  const {toast} = useToast();
   const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this thread?")) {
       try {
@@ -30,12 +23,14 @@ const DeleteButton = ({ threadId, onAction, createdAt}: DeleteButtonProps) => {
       }
     }
     onAction();
+    toast({
+      description: "Thread Successfully deleted.",
+    })
   };
 
   return (
     <button onClick={handleDelete} className="text-light-3">
       Delete
-      {localTime}
     </button>
   );
 };
