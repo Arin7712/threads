@@ -17,6 +17,9 @@ import { fetchCurrentUser, fetchUser } from "@/lib/actions/user.actions";
 import { revalidatePath } from "next/cache";
 import ThreadShare from "../shared/ShareThread";
 import ThreadActionDialog from "../shared/ThreadActionDialog";
+import { format, parseISO } from 'date-fns';
+import { create } from "domain";
+
 
 interface Props {
   id: string;
@@ -35,7 +38,7 @@ interface Props {
     name: string;
     image: string;
   } | null;
-  createdAt: string;
+  createdAt: Date;
   comments: {
     author: {
       image: string;
@@ -69,6 +72,8 @@ const ThreadCard =  async({
   if(!user)redirect('/sign-in')
     const userInfo = await fetchUser(user.id);
     console.log('CURRENTUSER:', curUserId.toString());
+
+  const localTime = createdAt.toLocaleString();
 
   return (
     <article
@@ -189,7 +194,7 @@ const ThreadCard =  async({
       {!community ? (
         <div className="mt-5 flex items-center mb-10 flex-row justify-between">
           <p className="text-subtle-medium text-gray-1">
-            {formatDateString(createdAt)}
+            {localTime}
           </p>
           <div className="flex flex-row gap-2 items-center">
           {curUserId === curThreadId && parentId == null && (
@@ -212,7 +217,7 @@ const ThreadCard =  async({
           className="flex items-center"
         >
           <p className="text-subtle-medium text-gray-1">
-            {formatDateString(createdAt)} -{" "}
+            {/*{formatDateString(createdAt)} -{" "}*/}
             <span className="text-primary-500">{community.name} Community</span>
           </p>
 

@@ -14,11 +14,11 @@ const threadSchema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: new Date()
     }, 
     editedAt: {
         type: Date,
-        default: Date.now
+        default: new Date()
     },
     parentId: {
         type: String
