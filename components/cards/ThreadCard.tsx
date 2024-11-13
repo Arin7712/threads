@@ -193,9 +193,9 @@ const ThreadCard =  async({
       </div>
       {!community ? (
         <div className="mt-5 flex items-center mb-10 flex-row justify-between">
-          <p>
+          <div>
             <ThreadTime createdAt={createdAt}/>
-          </p>
+          </div>
           <div className="flex flex-row gap-2 items-center">
           {curUserId === curThreadId && parentId == null && (
                   // <DeleteButton threadId={id} />

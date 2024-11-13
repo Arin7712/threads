@@ -94,6 +94,7 @@ function PostThread({ userId }: Props) {
             path: '/',
             image: values.image || '', // Use the uploaded image URL
         });
+        toast({description: "Thread created successfully"})
     } else {
         await createThread({
             text: values.thread,
