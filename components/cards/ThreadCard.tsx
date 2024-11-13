@@ -63,7 +63,8 @@ const ThreadCard =  async({
   image,
 }: Props) => {
 
-  const countComments = await fetchAllChildThreads(id)
+  const countComments = await fetchAllChildThreads(id);
+  const localTime = new Date(createdAt).toLocaleString(); // Adjusts to user's local time zone
   const fetchThread = await fetchThreadById(id);
   const userLikes = fetchThread.likes.length;
   const user = await currentUser();
@@ -73,7 +74,6 @@ const ThreadCard =  async({
     const userInfo = await fetchUser(user.id);
     console.log('CURRENTUSER:', curUserId.toString());
 
-  const localTime = createdAt.toLocaleString();
 
   return (
     <article
