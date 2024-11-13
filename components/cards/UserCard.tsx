@@ -9,6 +9,7 @@ import {
   followUser,
   unfollowUser,
 } from "@/lib/actions/user.actions";
+import { useToast } from "@/hooks/use-toast";
 
 interface Props {
   id: string;
@@ -31,6 +32,7 @@ const UserCard = ({
 }: Props) => {
   const router = useRouter();
   const [isFollowing, setIsFollowing] = useState(false); // Initial follow state is set to false
+  const {toast} = useToast();
   
   // Fetch the follow status when the component mounts
   
@@ -58,12 +60,18 @@ const UserCard = ({
         const response = await unfollowUser(currentUserId, followId);
         if (response?.success) {
           setIsFollowing(false); // Update the state to unfollowed
+          toast({
+            description: "Unfollowed successfully"
+          })
         }
       } else {
         // Follow the user
         const response = await followUser(currentUserId, followId);
         if (response?.success) {
           setIsFollowing(true); // Update the state to followed
+          toast({
+            description: "Followed successfully"
+          })
         }
       }
     } catch (error) {

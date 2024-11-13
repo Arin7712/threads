@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { CommentValidation } from "@/lib/validations/thread";
 import Image from "next/image";
 import { addCommentToThread } from "@/lib/actions/thread.actions";
-// import { createThread } from "@/lib/actions/thread.actions";
+import { useToast } from "@/hooks/use-toast";
 
 interface Props{
     threadId: string,
@@ -31,8 +31,8 @@ interface Props{
 const Comment = ({threadId, currentUserImg, currentUserId}: Props) => {
     const router = useRouter();
     const pathname = usePathname();
-  
     const { organization } = useOrganization();
+    const {toast} = useToast();
   
     const form = useForm<z.infer<typeof CommentValidation>>({
       resolver: zodResolver(CommentValidation),
@@ -42,8 +42,10 @@ const Comment = ({threadId, currentUserImg, currentUserId}: Props) => {
     });
   
     const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
-      await addCommentToThread(threadId, values.thread, JSON.parse(currentUserId), pathname);
-  
+      await addCommentToThread(threadId, values.thread, JSON.parse(currentUserId), pathname ? pathname : '');
+      toast({
+        description: "Comment added successfully."
+      })
       form.reset();
     };
 

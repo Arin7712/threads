@@ -22,6 +22,7 @@ import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/lib/uploadthing";
 import { updateUser } from "@/lib/actions/user.actions";
 import {usePathname, useRouter} from 'next/navigation';
+import { useToast } from "@/hooks/use-toast";
 
 interface Props{
 user:{
@@ -42,6 +43,7 @@ const AccountProfile = ({user, btnTitle} : Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const[isLoading, setIsLoading] = useState(false);
+  const {toast} = useToast();
 
     const form = useForm({
         resolver:zodResolver(userValidation),
@@ -95,8 +97,12 @@ const AccountProfile = ({user, btnTitle} : Props) => {
 
         });
 
+
         if(pathname === '/profile/edit'){
           setIsLoading(false);
+          toast({
+            description : "Profile updated successfully"
+          })
           router.back();
         }else{
           setIsLoading(false);
