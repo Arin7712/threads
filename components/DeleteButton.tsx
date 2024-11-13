@@ -5,10 +5,11 @@ import { useEffect, useState } from "react";
 
 interface DeleteButtonProps {
   threadId: string;
+  createdAt: string
   onAction: () => void
 }
 
-const DeleteButton = ({ threadId, onAction}: DeleteButtonProps) => {
+const DeleteButton = ({ threadId, onAction, createdAt}: DeleteButtonProps) => {
 
   const [localTime, setLocalTime] = useState<string>("");
 

@@ -19,6 +19,7 @@ import ThreadShare from "../shared/ShareThread";
 import ThreadActionDialog from "../shared/ThreadActionDialog";
 import { format, parseISO } from 'date-fns';
 import { create } from "domain";
+import ThreadTime from "../shared/ThreadTime";
 
 
 interface Props {
@@ -194,6 +195,7 @@ const ThreadCard =  async({
       {!community ? (
         <div className="mt-5 flex items-center mb-10 flex-row justify-between">
           <p className="text-subtle-medium text-gray-1">
+            <ThreadTime createdAt={createdAt}/>
             {localTime}
           </p>
           <div className="flex flex-row gap-2 items-center">
@@ -229,16 +231,6 @@ const ThreadCard =  async({
             className="ml-1 rounded-full object-cover"
           />
         </Link>
-        <div className="flex flex-row gap-2 items-center">
-        {curUserId === curThreadId && parentId == null && (
-                // <DeleteButton threadId={id} />
-                <></>
-              )}
-        {curUserId === curThreadId && parentId == null && (
-                // <EditButton threadId={id} />
-                <></>
-              )}
-        </div>
         </div>
       )}
     </article>
