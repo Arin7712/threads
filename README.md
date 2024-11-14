@@ -1,3 +1,4 @@
+![App Screenshot](/assets/threadsmockup.png)
 
 # A Full Stack Threads Clone
 
