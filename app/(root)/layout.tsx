@@ -28,7 +28,8 @@ const geistMono = localFont({
 
 export const metadata = {
   title: 'Threads',
-  description: 'A next.js 14 Meta Threads'
+  description: 'A social app for posting threads and more.',
+  image: '/assets/threadsmockup.png'
 }
 
 export default function RootLayout({
